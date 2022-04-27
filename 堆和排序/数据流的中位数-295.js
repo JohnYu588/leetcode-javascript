@@ -84,9 +84,9 @@ var MedianFinder = function () {
 }
 
 // 1、max加入后重新排序（就是不断和它父元素比对，找到他的位置）
-// 2、min加入max的最大值(保证min的一半永远是最大的)后重新排序
-// 3、max.extract() top被插入后，要把根节点取出然后补位重新排序，保证两个堆一样大小
-// 4、如果max长度小于min，把min的最小值加入max(保证max的一半永远是最大的);min.extract()
+// 2、min加入max的最大值(保证min的一半永远是最大的)后重新排序(max加一个，min也要加一个，保证两个大小一样)
+// 3、max.extract() top被插入后，要把根节点取出（为了保证两边不会有重复值）然后补位重新排序，
+// 4、如果max长度小于min，把min的最小值加入max(保证max的一半永远是最大的);min.extract() （为了保证max===min或max===min+1）
 MedianFinder.prototype.addNum = function (num) {
   this.maxHeap.insert(num) // maxHeap长度为0直接加
   this.minHeap.insert(this.maxHeap.top()) // minHeap长度为0时也是直接加,所以变成max[] min[1]
@@ -112,9 +112,9 @@ medianFinder.addNum(2) // max:[2,1] min:[] => max:[2,1] min:[2] => max:[1] min:[
 console.log(medianFinder.findMedian()) // 1.5 maxHeap[1] minHeap[2]
 medianFinder.addNum(3) // max:[3,1] min[2] =>  max:[3,1] min[2,3] =>  max:[1] min[2,3] => max[2,1] min[3]
 console.log(medianFinder.findMedian()) // 2  maxHeap [2,1] minHeap[3]
-medianFinder.addNum(5) //  max[5,2,1] min[3] => max[5,2,1] min[3,5] => max[2,1] min[3,5]
+medianFinder.addNum(5) //  max[5,1,2](比元素2，大，交换位置) min[3] => max[5,1,2] min[3,5] => max[2,1](5取出，最后一个节点2替换) min[3,5]
 console.log(medianFinder.findMedian()) // 2.5 max[2,1] min[3,5]
-medianFinder.addNum(4) //  max[4,2,1] min[3,5] => max[4,2,1] min[3,4,5] => max[2,1] min[3,4,5] =>max[3,2,1] min[4,5]
+medianFinder.addNum(4) //  max[4,1,2] min[3,5] => max[4,1,2] min[3,5,4] => max[2,1] min[3,5,4] =>max[3,1,2] min[4,5]
 console.log(medianFinder.findMedian()) // 3 max[3,1,2] min[4,5]
 // max [1],min [1]为1的栈顶；长度为1仅仅插入
 // this.maxHeap.extract() max[];pop 栈顶
@@ -152,12 +152,6 @@ console.log(medianFinder.findMedian()) // 3 max[3,1,2] min[4,5]
 // 3、若此时最大堆的大小 < 最小堆的大小，取出 minHeap 的堆顶元素，让入 maxHeap
 // 由于 JavaScript 中没有堆，所以要自己实现。在实现的时候，堆的代码其实只需要一份
 // 堆中进行判定的比较函数由外界传入即可。这是一种名为「桥接模式」的设计模式，具体可以看这篇文章：《设计模式 - 桥接模式 - JavaScript》
-
-// 1、max[1] 2、max[] min[1] 3、max[1] min[]
-// 1、max[1,2]=>max[2,1] 2、max[1] min[2]  max.length === min.length => median =1+2/2=1.5
-// 1、max[1,3]=>max[3,1] 2、max[1] min[2,3] 3、max[1,2]=>max[2,1] min[3]  max.length=min.length+1=>median = max栈顶2
-// 1、max[2,1,5]=>max[5,1,2] 2、max[2,1] min[3,5]  max.length === min.length => median =2+3/2=>2.5
-// 1、max[2,1,4]=>max[4,2,1] 2、max[2,1] min[3,5,4]   3、max[2,1,3]=>max[3,2,1] min[5,4]=>[4,5] => median = 3
 
 // 堆的特性
 // 堆是一棵二叉树。根据根节点是最大值或最小值，分别称为最大堆或最小堆。
