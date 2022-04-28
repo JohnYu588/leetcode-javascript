@@ -85,7 +85,7 @@ var MedianFinder = function () {
 
 // 1、max加入后重新排序（就是不断和它父元素比对，找到他的位置）
 // 2、min加入max的最大值(保证min的一半永远是最大的)后重新排序(max加一个，min也要加一个，保证两个大小一样)
-// 3、max.extract() top被插入后，要把根节点取出（为了保证两边不会有重复值）然后补位重新排序，
+// 3、max.extract() top被插入后，要把根节点取出（为了保证两边不会有重复值，不能直接取出，要重新排序），最后节点顶上然后下沉重新排序，
 // 4、如果max长度小于min，把min的最小值加入max(保证max的一半永远是最大的);min.extract() （为了保证max===min或max===min+1）
 MedianFinder.prototype.addNum = function (num) {
   this.maxHeap.insert(num) // maxHeap长度为0直接加
