@@ -72,7 +72,7 @@ class MinHeap {
       ) {
         child++ // 如果右子节点存在且值更小，则用它，去比较
       }
-      // 用比较小的子节点和父节点比较
+      // 用比较小的子节点和父节点比较.
       if (this.heap[i] > this.heap[child]) {
         // 如果插入的数字比最小的子节点大
         ;[this.heap[child], this.heap[i]] = [this.heap[i], this.heap[child]] // 交换(把最小的节点放到最前面)
