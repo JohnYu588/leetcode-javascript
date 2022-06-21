@@ -1,28 +1,30 @@
 var findCircleNum = function (isConnected) {
-  //城市的数量
+  //城市的数量,题目要求n*n=>n===n
   const cities = isConnected.length
-  //表示哪些城市被访问过
-  const visited = new Set()
-  let provinces = 0 //相连的城市数量，也就是省份
+  //表示哪些城市被访问过(被别的城市相连)
+  const visited = [] //new Set()
+  let count = 0 //相连的城市数量，也就是省份
   //遍历所有的城市
   for (let i = 0; i < cities; i++) {
+    // 3个城市
     //如果当前城市没有被访问过，说明是一个新的省份，count
     //要加1，并且和这个城市相连的都标记为已访问过，也就是
     //同一省份的
-    if (!visited.has(i)) {
+    if (!visited[i]) {
       dfs(isConnected, visited, cities, i)
-      provinces++
+      count++
     }
   }
   //返回省份的数量
-  return provinces
+  return count
 }
 
 const dfs = (isConnected, visited, cities, i) => {
   for (let j = 0; j < cities; j++) {
-    if (isConnected[i][j] == 1 && !visited.has(j)) {
-      //如果第i和第j个城市相连，说明他们是同一个省份的，把它标记为已访问过
-      visited.add(j)
+    if (isConnected[i][j] == 1 && !visited[j]) {
+      // 如果i,j不相连,说明j是一个新的省份,或者j已经访问过了,退出dfs循环,回到父循环,
+      //如果第i和第j个城市相连，说明他们是同一个省份的，把它(j)也标记为已访问过
+      visited[j] = true
       //然后继续查找和第j个城市相连的城市
       dfs(isConnected, visited, cities, j)
     }
@@ -31,15 +33,49 @@ const dfs = (isConnected, visited, cities, i) => {
 
 console.log(
   findCircleNum([
-    [1, 0, 0],
-    [0, 0, 0],
+    [1, 1, 0],
+    [1, 1, 0],
     [0, 0, 1],
   ])
 )
 
-// [0,0] [1,1] [2,3]本身一个城市,但是[0,1][1,0]是1说明1，0城市相连在一个省份，所以结果为2
+// 1、!visited[0]=>dfs(0)=>[0][0]&&!visited[0]=>visited[0]=true,dfs(0)
+// 2、[0][0]&&visited[0]===true=>[0][1]&&!visited[1]=>visited[1]=true,dfs[1]
+// 3、[1][0]&&visited[0] === true => [1][1]&&visited[1] === true => ![1][2]
+// [1][3]=>退出最后一次循环,返回第二次循环继续回到第二步的[0][1]的dfs[1],继续往下走到[0,2]=>![0][2]
+// [0][3]=>退出第二次循环,返回第一次循环的[0][0]的dfs[0],继续往下走到[0,1]=>[0][1]===1&&visited[1]=>[0,2]=>![0][2]
+// [0][3]退出dfs返回父循环count++
+
+// 深度优先搜索的思路是很直观的。遍历所有城市，对于每个城市，如果该城市尚未被访问过，则从该城市开始深度优先搜索，通过矩阵isConnected 得到与该城市直接相连的城市有哪些(第一次父循环纵向遍历[0][1],[0][2]即可知道)，
+// 这些城市和该城市属于同一个连通分量，然后对这些城市继续深度优先搜索(第一次父循环纵向遍历到[0][1]的时候对1再次进行深度遍历([1][0],[1][1],[1][2])看看还有没有其他城市与1相连(间接与0相连))，直到同一个连通分量的所有城市都被访问到，即可得到一个省份。遍历完全部城市以后，即可得到连通分量的总数，即省份的总数。
+
+// 纵向碰到[0,1]为1,再对1进行纵向,[1,2]为0说明1跟2不想相连,[1,3]结束1的dfs,再返回[0,2]===0说明0和2也不相连.[0,3]结束0的dfs返回父循环 count++
+// 再dfs[1]实际上dfs[1]在dfs[0]的时候已经执行过了因此visited[1]===true
+// 再dfs[2] count++
+// count=2
+
+// [1, 1, 0],
+// [1, 1, 0],
+// [0, 0, 1],
+// 无视[0,0] [1,1] [2,2]=>[0,1],[1,0]得知第 0 个城市和第 1 个城市直接相连形成一个省份,因此总共两个省份;
+
+// [1, 0, 0],
+// [0, 1, 0],
+// [0, 0, 1],
+// [0,0] [1,1] [2,2]本身一个城市,彼此互不相连,所以结果是3个省份
+// 前面横坐标,后面纵坐标[x,y]
+
+// [0, 1, 0],
+// [0, 0, 1],
+// [0, 0, 0],
+// [0,1],[1,2]说明0和1相连,1又和2相连=>0和2间接相连,所以结果是1个省份
+
+// [0, 1, 0],
+// [0, 0, 0],
+// [0, 0, 0],
+// [0,1] 0和1相连,2单独,总共两个省份
 
 // 作者：LeetCode-Solution
-// 链接：https://leetcode.cn/problems/number-of-provinces/solution/sheng-fen-shu-liang-by-leetcode-solution-eyk0/
+// 链接：https://leetcode.cn/problems/number-of-count/solution/sheng-fen-shu-liang-by-leetcode-solution-eyk0/
 // 来源：力扣（LeetCode）
 // 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
