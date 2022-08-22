@@ -6,12 +6,12 @@ var swapPairs = function (head) {
   dummyHead.next = head
   let temp = dummyHead
   while (temp.next !== null && temp.next.next !== null) {
-    const node1 = temp.next
-    const node2 = temp.next.next
-    temp.next = node2
-    node1.next = node2.next
-    node2.next = node1
-    temp = node1
+    const node1 = temp.next // 1,2,3,4
+    const node2 = temp.next.next // 2,3,4
+    temp.next = node2 // 0,2,3,4
+    node1.next = node2.next // 1,3,4
+    node2.next = node1 // 2,1,3,4
+    temp = node1 // 0,2,1,3,4
   }
   return dummyHead.next
 }

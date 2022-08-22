@@ -21,3 +21,4 @@ var largestRectangleArea = function (heights) {
 
 console.log(largestRectangleArea([2, 1, 5, 6, 2, 3]))
 // https://leetcode-cn.com/problems/largest-rectangle-in-histogram/solution/wo-yong-qiao-miao-de-bi-yu-jiang-dan-diao-zhan-jie/
+// 旧的新的元素比栈顶小 就推出栈顶元素,计算面积,然后继续向前推进
