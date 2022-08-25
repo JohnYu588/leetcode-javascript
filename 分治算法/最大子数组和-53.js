@@ -44,9 +44,25 @@ function _maxSubArray(nums, left, right) {
 
   const mid = Math.floor((left + right) / 2)
   const lsum = _maxSubArray(nums, left, mid) //左边最大子序和
+  //   0,1,0
+  // 0,2,1
+  // 0,4,2
+  // 0,8,4
   const rsum = _maxSubArray(nums, mid + 1, right) //右边最大子序和
+  //   7,8,7
+  // 5,8,6
+  // 0,8,4
   const cross = crossSum(nums, left, right, mid) //合并左右的之后的最大子序和
-
+  console.log(left + "," + right + "," + mid)
+  // 0,1,0,-1 从左边递归的最后一级开始 ,回溯顺序是从下往上，从右往左的
+  // 0,2,1,-2
+  // 3,4,3,3（合并左右的）
+  // 0,4,2,2
+  // 5,6,5,3（合并左右的）
+  // 7,8,7,-1
+  // 5,8,6,2
+  // 0,8,4,6
+  // 6
   return Math.max(lsum, rsum, cross) //返回3中子序和中最大的
 }
 
