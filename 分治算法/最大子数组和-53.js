@@ -63,7 +63,7 @@ function _maxSubArray(nums, left, right) {
   // 5,8,6,2
   // 0,8,4,6
   // 6
-  return Math.max(lsum, rsum, cross) //返回3中子序和中最大的
+  return Math.max(lsum, rsum, cross) //返回3中子序和中最大的和
 }
 
 var maxSubArray = function (nums) {
