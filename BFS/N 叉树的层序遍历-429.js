@@ -21,6 +21,8 @@ var levelOrder = function (root) {
 
   return ans
 }
+// 遍历第一层queue shift放到level，在将他的子节点放到queue，第一层的数组存到ans；
+// 次数queue长度还是大于0，继续遍历第二层。。。
 
 // 链接：https://leetcode.cn/problems/n-ary-tree-level-order-traversal/solution/n-cha-shu-de-ceng-xu-bian-li-by-leetcode-lxdr/
 

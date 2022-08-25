@@ -71,3 +71,8 @@ console.log(zigzagLevelOrder(t))
 
 // f = (r, v) =>
 //   r.length % 2 ? r[r.length - 1].unshift(v) : r[r.length - 1].push(v)
+
+/* 给你二叉树的根节点 root ，返回其节点值的 锯齿形层序遍历 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。 */
+
+/* 输入：root = [3,9,20,null,null,15,7]
+输出：[[3],[20,9],[15,7]] */
