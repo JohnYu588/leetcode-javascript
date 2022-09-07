@@ -15,8 +15,9 @@ var maxProfit = function (prices, fee) {
   let result = 0
   let minPrice = prices[0] // 记录最低价格
   for (let i = 1; i < prices.length; i++) {
-    // 情况二：相当于买入
+    // 情况二：相当于买入(前一天是收获利润区间里的最后一天（相当于真正的卖出了），今天要重新记录最小价格了。)
     if (prices[i] < minPrice) {
+      // 4<6 || 3<7(10-3)连续获利最后一天的后一天
       minPrice = prices[i]
     }
 
@@ -27,13 +28,25 @@ var maxProfit = function (prices, fee) {
 
     // 计算利润，可能有多次计算利润，最后一次计算利润才是真正意义的卖
     if (prices[i] > minPrice + fee) {
+      // 8>1+2 9>4+2
       result += prices[i] - minPrice - fee
+      // 如果连续获利到这里结束了，就刚好，否则持续获利的话 下一步还是要加回去
+      // 8-1-2=5 + 9-4-2=3 =8 || 7-1-3=3 + 10-4-3 = 6
       // 买入和卖出只需要支付一次手续费
-      minPrice = prices[i] - fee // 情况一，这一步很关键
+      minPrice = prices[i] - fee
+      // 情况一，这一步很关键(因为这里不是真正的卖出，而是持股,在32行 - minPrice的时候加回去【prices[i+1] - ( prices[i] - fee) -fee】，
+      // 不然明天获利的时候就多减了一次手续费
+      // 8-2=6 || 7-3=4
     }
   }
   return result
 }
+
+// console.log(maxProfit([1, 3, 2, 8, 4, 9], 2))
+// ((8 - 1) - 2)真正卖出 + ((9 - 4) - 2) = 8
+console.log(maxProfit([1, 3, 7, 5, 10, 3], 3)) // 6
+// 7-1-3【持股如果后没有比7大的了这里就直接卖出】 +10-(7-3)【将前面手续费加回去】-3 = 6 相当于(10-1-3)
+
 // 本题有了手续费，就要关系什么时候买卖了，因为计算所获得利润，需要考虑买卖利润可能不足以手续费的情况。
 // 如果使用贪心策略，就是最低值买，最高值（如果算上手续费还盈利）就卖。
 // 此时无非就是要找到两个点，买入日期，和卖出日期。
@@ -51,3 +64,9 @@ var maxProfit = function (prices, fee) {
 // 大家也可以发现，情况三，那块代码是可以删掉的，我是为了让代码表达清晰，所以没有精简
 
 // 链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/solution/714-mai-mai-gu-piao-tan-xin-dong-gui-xia-p3h1/
+
+// 贪心中为啥是minPrice = prices[i] - fee; 举例：[1,3,5], fee=1,连续上涨两天卖出
+
+// 第i天：res += prices[i]- minPrice-fee，表示利润
+// 第i+1天：res += prices[i+1] - prices[i]，不需要手续费。相当于第i天并没有卖出，而是在第i+1天卖出。
+// 等价于prices[i+1] - prices[i] == prices[i+1] - ( prices[i] - fee) -fee 所以minPrice在prices[i] > minPrice+fee 的时候要更新为 prices[i] - fee
