@@ -2,15 +2,6 @@
  * @param {number} n
  * @return {number}
  */
-// var climbStairs = function (n) {
-//   const dp = []
-//   dp[0] = 1
-//   dp[1] = 1
-//   for (let i = 2; i <= n; i++) {
-//     dp[i] = dp[i - 1] + dp[i - 2] // 初始化dp[2] = dp[0] + dp[1] = 1 + 1
-//   }
-//   return dp[n]
-// }
 var climbStairs = function (n) {
   if (n <= 2) {
     return n
@@ -29,7 +20,7 @@ var climbStairs = function (n) {
 
   return dp[n]
 }
-
+console.log(climbStairs(10))
 // 链接：https://leetcode.cn/problems/climbing-stairs/solution/hua-jie-suan-fa-70-pa-lou-ti-by-guanpengchn/
 // 标签：动态规划
 // 本问题其实常规解法可以分成多个子问题，爬第n阶楼梯的方法数量，等于 2 部分之和
