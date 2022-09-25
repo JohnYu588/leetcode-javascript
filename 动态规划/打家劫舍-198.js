@@ -25,7 +25,7 @@ const rob = (nums) => {
   }
   return dp[len - 1]
 }
-console.log(rob([2, 7, 9, 3, 1]))
+console.log(rob([2, 1, 1, 2]))
 // 链接：https://leetcode.cn/problems/house-robber/solution/dai-ma-sui-xiang-lu-dai-ni-xue-tou-dong-ezvt3/
 // 边界条件为：
 
