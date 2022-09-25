@@ -16,12 +16,13 @@ const rob = (root) => {
     // 递归出口
     if (!node) return [0, 0]
     // 遍历左子树
-    const left = postOrder(node.left)
+    const left = postOrder(node.left) // 这里left返回结果就是 最底下return的[DoNot,Do]，所以left[0] = DoNot,left[1] = Do
     // 遍历右子树
     const right = postOrder(node.right)
-    // 不偷当前节点，左右子节点都可以偷或不偷，取最大值
+    // left,right 代表不同子树的 root 节点; [0],[1]表示是否打劫了 root。
+    // 不偷当前节点，左右子节点都可以偷或不偷，取最大值;左子树的两个状态的较大值 + 右子树的两个状态的较大值。
     const DoNot = Math.max(left[0], left[1]) + Math.max(right[0], right[1])
-    // 偷当前节点，左右子节点只能不偷
+    // 偷当前节点，左右子节点只能不偷;root.val + 左子树的 [0] 状态 + 右子树的 [0] 状态。
     const Do = node.val + left[0] + right[0]
     // [不偷，偷]
     return [DoNot, Do]
@@ -30,6 +31,15 @@ const rob = (root) => {
   // 返回最大值
   return Math.max(...res)
 }
+/**
+ * [3,2,3,null,3,null,1] =>7
+ * 后序遍历 [不打劫当前节点，打劫当前节点]
+ *    [6,7]
+ *     /  \
+ * [3,2]  [1,3]
+ *    \      \
+ *   [0,3]  [0,1]
+ */
 // 动态规划（树形DP）
 // 打劫一个树的最大收益，是 robIncludeRoot 和 robExcludeRoot 中的较大者。
 // 即每个子树都有两个状态下的最优解：没打劫 root、和有打劫 root 下的最优解。
